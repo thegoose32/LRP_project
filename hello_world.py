@@ -1,22 +1,21 @@
-valid_input = False
+def int_input(prompt,error_message):
+	valid_input = False
+	while valid_input == False:
+		try: 
+			Raw_Input_String = raw_input(prompt)
+			Raw_Input_Integer = int(Raw_Input_String)  #convert raw input (string) to integer
+			valid_input = True
+		except ValueError:	
+			print error_message
+	return Raw_Input_Integer
 
-while valid_input == False:
-	try: 
-		Input_Starting_Year = raw_input("What year do you want to start forecasting in?")
-		Starting_Year = int(Input_Starting_Year)  #convert raw input (string) to integer
-		valid_input = True
-	except ValueError:	
-		print "Please enter a valid year"
+Starting_Year_Prompt = "What year do you want to start forecasting in?"
+Starting_Year_Error = "Please enter a valid year"
+Starting_Year = int_input(Starting_Year_Prompt,Starting_Year_Error)
 
-valid_input = False
-
-while valid_input == False:
-	try: 
-		Input_Years_from_Start = raw_input("How many years do you want to forecast?")
-		Years_from_Start = int(Input_Years_from_Start)
-		valid_input = True
-	except ValueError:
-		print "Please enter a valid range"
+Years_from_Start_Prompt = "How many years do you want to forecast?"
+Years_from_Start_Error = "Please enter a valid range"
+Years_from_Start = int_input(Years_from_Start_Prompt,Years_from_Start_Error)
 
 Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")
 
