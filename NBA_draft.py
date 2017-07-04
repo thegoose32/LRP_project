@@ -4,6 +4,8 @@ available_players = ["Lebron","Durant","Kawhai","Westbrook","Harden","George","B
 team_1 = []
 team_2 = []
 
+
+
 print "Welcome to the NBA draft"
 
 selections = 0

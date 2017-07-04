@@ -1,4 +1,7 @@
+#input for starting year and how many years out
+
 def int_input(prompt,error_message):
+	#converts raw input from string into integer
 	valid_input = False
 	while valid_input == False:
 		try: 
@@ -17,27 +20,23 @@ Years_from_Start_Prompt = "How many years do you want to forecast?"
 Years_from_Start_Error = "Please enter a valid range"
 Years_from_Start = int_input(Years_from_Start_Prompt,Years_from_Start_Error)
 
+Last_Year = Starting_Year + Years_from_Start
+
+#measures of time
+
+Time_Measure_Options = {"annual": 1, "semi-annual": 0.5, "quarter": .25}
+
 Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")
 
-while Time_Measure != "quarter" and Time_Measure != "semi-annual" and Time_Measure != "annual":
+while (Time_Measure in Time_Measure_Options) == False:
 	print "Please enter a valid period type"
 	Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")	 
 
-Last_Year = Starting_Year + Years_from_Start
-
 years=[]
-
-if Time_Measure == "annual":
-	time_increments = 1
-elif Time_Measure == "semi-annual":
-	time_increments = 0.5
-else:
-	time_increments = 0.25
-
 
 while Starting_Year < Last_Year:
 	#function to add number of years to the list years
 	years.append(Starting_Year)
-	Starting_Year = Starting_Year + time_increments
+	Starting_Year = Starting_Year + Time_Measure_Options[Time_Measure]
 
 print years
