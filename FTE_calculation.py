@@ -1,8 +1,17 @@
 #FTE_calculation
 
-FTE = [10,12]
-FTE_rate = 100000
-total = 0
+GandA_FTEs = [2,2,5,7]
+GandA_FTE_rate = 100000
 
-for total_cost in FTE:
-	print total = FTE * FTE_rate
+FTE_Cost_Year = []
+
+RandD_FTEs = [8,8,12,15]
+RandD_FTE_rate = 120000
+
+def total_FTE_cost(FTEs, FTE_rate):
+	for FTE in FTEs:
+		FTE_Cost_Year.append(FTE * FTE_rate)
+
+total_FTE_cost(GandA_FTEs,GandA_FTE_rate)
+
+print FTE_Cost_Year
