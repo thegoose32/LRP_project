@@ -12,6 +12,14 @@ def int_input(prompt,error_message):
 			print error_message
 	return Raw_Input_Integer
 
+def count_objects(prompt, error_message,name_objects,name_objects_list):
+	Programs_Count = int_input(prompt,error_message)
+	input_count = 1
+	while input_count < (Programs_Count+1):
+		Program_Name = raw_input(name_objects+str(input_count)+"?")  
+		name_objects_list.append(Program_Name)
+		input_count += 1
+
 Starting_Year_Prompt = "What year do you want to start forecasting in?"
 Starting_Year_Error = "Please enter a valid year"
 Starting_Year = int_input(Starting_Year_Prompt,Starting_Year_Error)
@@ -21,6 +29,9 @@ Years_from_Start_Error = "Please enter a valid range"
 Years_from_Start = int_input(Years_from_Start_Prompt,Years_from_Start_Error)
 
 Period_Error = "Please enter a valid period type"
+Number_error = "Please enter a valid number"
+Percent_error = "Please enter a valid percent"
+
 
 Last_Year = Starting_Year + Years_from_Start
 
@@ -52,7 +63,6 @@ for period in years:
 	else:
 		periods[("FY "+str(int(period)))] = period
 
-print years #remove after test
 print periods
 
 number_of_periods = len(years)
@@ -61,6 +71,33 @@ def time_measure_convert(annual_cost):
 	#converts annual costs to user-defined measurement
 	return annual_cost * Time_Measure_Options[Time_Measure]
 
+#Setting up Program Phases
+
+program_phases = []
+Program_Phases_Count_Prompt = "How many cost phases are in the lifecyle of your programs? (i.e. Discovery, GLP tox, Ph 1 study, etc."
+Program_Phases_Prompt = "What label do you want for cost phase "
+
+count_objects(Program_Phases_Count_Prompt,Number_error,Program_Phases_Prompt,program_phases)
+
+print program_phases
+
+program_phases_costs ={}
+
+for program in program_phases:
+	Program_Phases_Costs_Prompt = "For cost phase %(x)s, what is the cost per %(y)s period?" % {"x" : program, "y" : Time_Measure}
+	Program_Phase_Cost = int_input(Program_Phases_Costs_Prompt,Number_error)
+	program_phases_costs[program] = Program_Phase_Cost
+
+print program_phases_costs
+
+#Programs
+
+Programs = []
+
+Programs_Count_Prompt = "How many programs does the company have?"
+
+
+
 #FTEs
 
 Starting_FTE_Prompt = "How many FTEs does the company start with?"
@@ -68,11 +105,9 @@ Starting_FTE_Error = "Please enter a valid FTE number"
 Starting_FTEs = int_input(Starting_FTE_Prompt,Starting_FTE_Error)
 
 FTE_growth_prompt = "What percent growth rate does the company grow?"
-Percent_error = "Please enter a valid percent"
 FTE_growth_rate = int_input(FTE_growth_prompt,Percent_error)
 
 FTE_cost_rate_prompt = "What is the annual cost of a FTE?"
-Number_error = "Please enter a valid number"
 FTE_cost_rate = time_measure_convert(int_input(FTE_cost_rate_prompt,Number_error))
 
 FTE_cost_rate_growth_prompt = "What is the annual growth rate in FTE costs?"
@@ -113,7 +148,7 @@ print Operating_costs
 
 period_reported = raw_input("What period do you want financial results for?")
 
-while (period_reported in periods) == False: #needs to be updated to periods; how do I link periods and years lists?
+while (period_reported in periods) == False:
 	print Period_Error
 	period_reported = raw_input("What period do you want financial results for?")
 
