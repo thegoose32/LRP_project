@@ -47,8 +47,6 @@ Last_Year = Starting_Year + Years_from_Start
 #measures of time
 
 Time_Measure_Options = {"annual": 1, "semi-annual": 0.5, "quarter": .25}
-Quarters = {.25: "Q2 ", .5: "Q3 ", .75: "Q4 ", 0.0: "Q1 "}
-Halves = {.5: "H2 ", 0.0: "H1 "}
 
 Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")
 
@@ -57,22 +55,13 @@ while (Time_Measure in Time_Measure_Options) == False:
 	Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")	 
 
 years=[]
-periods = {}
 
 while Starting_Year < Last_Year:
 	#function to add number of years to the list years
 	years.append(Starting_Year)
 	Starting_Year = Starting_Year + Time_Measure_Options[Time_Measure]
 
-for period in years:
-	if Time_Measure == "quarter":
-		periods[(str(Quarters[(period%1)]) + str(int(period-(period%1))))] = period
-	elif Time_Measure == "semi-annual":
-		periods[(str(Halves[(period%1)]) + str(int(period-(period%1))))] = period
-	else:
-		periods[("FY "+str(int(period)))] = period
-
-print periods
+print years
 
 number_of_periods = len(years)
 
@@ -197,28 +186,28 @@ Operating_costs ={}
 growth(Starting_operating_costs,Operating_costs_growth_rate,Operating_costs)
 
 print Operating_costs
-
 #reporting
 
-period_reported = raw_input("What period do you want financial results for?")
+period_reported_prompt = "What period do you want financial results for?"
+period_reported = int_input(period_reported_prompt,Period_Error)
 
-while (period_reported in periods) == False:
+while (period_reported in years) == False:
 	print Period_Error
-	period_reported = raw_input("What period do you want financial results for?")
+        period_reported = int_input(period_reported_prompt,Period_Error)
 
-def period_amount(period, numbers):
-	period = periods[period]
-	return numbers[period]
+company_revenue = 0
+company_program_expense = 0
 
 print "Total Period Costs:"
 for program in Programs:
-    print "Program %(x)s revenue was %(y)s" % {"x" : program, "y" :period_amount(period_reported,program_milestone_revenue)}
-    print "Program %(x)s costs was %(y)s" % {"x": program, "y" : period_amount(period_reported,program_costs)} 
-    company_revenue = period_amount(period_reported,program_milestone_revenue)
-    company_program_expense = period_amount(period_reported,program_costs)
+    
+    print "Program %(x)s revenue was %(y)s" % {"x" : program, "y" :program_milestone_revenue[period_reported]}
+    print "Program %(x)s costs was %(y)s" % {"x": program, "y" : program_costs[period_reported]}
+    company_revenue += program_milestone_revenue[period_reported]
+    company_program_expense += program_costs[period_reported]
 
-print "Total FTE costs were %s"  % period_amount(period_reported,FTE_Cost)
-print "Total operating costs were %s" %  period_amount(period_reported,Operating_costs)
+print "Total FTE costs were %s"  % FTE_Cost[period_reported]
+print "Total operating costs were %s" %  Operating_costs[period_reported]
 
-net_income = company_revenue - company_program_expense - period_amount(period_reported,FTE_Cost) - period_amount(period_reported,Operating_costs)
+net_income = company_revenue - company_program_expense - FTE_Cost[period_reported]- Operating_costs[period_reported]
 print "The Company's net income was %s" % net_income
