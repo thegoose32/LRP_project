@@ -1,24 +1,32 @@
+from decimal import Decimal
 
-def int_input(prompt,error_message):
-	#converts raw input from string into integer
-	valid_input = False
-	while valid_input == False:
-		try: 
-			Raw_Input_String = raw_input(prompt)
-			Raw_Input_Integer = int(Raw_Input_String)  #convert raw input (string) to integer
-			valid_input = True
-		except ValueError:	
-			print error_message
-	return Raw_Input_Integer
+
+def decimal_input(prompt,error_message):
+    #converts raw input from string into integer
+    valid_input = False
+    while valid_input == False:
+        try: 
+            Raw_Input_String = raw_input(prompt)
+            Raw_Input_Decimal = Decimal(Raw_Input_String)  #convert raw input (string) to integer
+            valid_input = True
+        except ValueError:    
+            print error_message
+    return Raw_Input_Decimal
+
+
+def percent_input(prompt,error_message):
+    result = decimal_input(prompt,error_message)
+    return result/Decimal('100.0')
+
 
 def count_objects(prompt, error_message,name_objects,name_objects_list):
-	#uses int_input to convert raw input to integer and then prompts user to name items in a list
-        Count = int_input(prompt,error_message)
-	input_count = 1
-	while input_count < (Count+1):
-		Program_Name = raw_input(name_objects+str(input_count)+"?")  
-		name_objects_list.append(Program_Name)
-		input_count += 1
+    #uses decimal_input to convert raw input to integer and then prompts user to name items in a list
+    Count = decimal_input(prompt,error_message)
+    input_count = 1
+    while input_count < (Count+1):
+        Program_Name = raw_input(name_objects+str(input_count)+"?")  
+        name_objects_list.append(Program_Name)
+        input_count += 1
 
 def yes_no_prompt(prompt):
     #function that requires a yes or no response
@@ -32,11 +40,11 @@ def yes_no_prompt(prompt):
 
 Starting_Year_Prompt = "What year do you want to start forecasting in?"
 Starting_Year_Error = "Please enter a valid year"
-Starting_Year = int_input(Starting_Year_Prompt,Starting_Year_Error)
+Starting_Year = decimal_input(Starting_Year_Prompt,Starting_Year_Error)
 
 Years_from_Start_Prompt = "How many years do you want to forecast?"
 Years_from_Start_Error = "Please enter a valid range"
-Years_from_Start = int_input(Years_from_Start_Prompt,Years_from_Start_Error)
+Years_from_Start = decimal_input(Years_from_Start_Prompt,Years_from_Start_Error)
 
 Period_Error = "Please enter a valid period type"
 Number_error = "Please enter a valid number"
@@ -46,28 +54,32 @@ Last_Year = Starting_Year + Years_from_Start
 
 #measures of time
 
-Time_Measure_Options = {"annual": 1, "semi-annual": 0.5, "quarter": .25}
+Time_Measure_Options = {
+    "annual": Decimal('1.0'),
+    "semi-annual": Decimal('0.5'),
+    "quarter": Decimal('.25'),
+}
 
 Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")
 
 while (Time_Measure in Time_Measure_Options) == False:
-	print Period_Error
-	Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")	 
+    print Period_Error
+    Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")     
 
 years=[]
 
 while Starting_Year < Last_Year:
-	#function to add number of years to the list years
-	years.append(Starting_Year)
-	Starting_Year = Starting_Year + Time_Measure_Options[Time_Measure]
+    #function to add number of years to the list years
+    years.append(Starting_Year)
+    Starting_Year = Starting_Year + Time_Measure_Options[Time_Measure]
 
 print years
 
 number_of_periods = len(years)
 
 def time_measure_convert(annual_cost):
-	#converts annual costs to user-defined measurement
-	return annual_cost * Time_Measure_Options[Time_Measure]
+    #converts annual costs to user-defined measurement
+    return annual_cost * Time_Measure_Options[Time_Measure]
 
 #Setting up Program Phases
 
@@ -82,9 +94,9 @@ print program_phases
 program_phases_costs ={}
 
 for program in program_phases:
-	Program_Phases_Costs_Prompt = "For cost phase %(x)s, what is the cost per %(y)s period?" % {"x" : program, "y" : Time_Measure}
-	Program_Phase_Cost = int_input(Program_Phases_Costs_Prompt,Number_error)
-	program_phases_costs[program] = Program_Phase_Cost
+    Program_Phases_Costs_Prompt = "For cost phase %(x)s, what is the cost per %(y)s period?" % {"x" : program, "y" : Time_Measure}
+    Program_Phase_Cost = decimal_input(Program_Phases_Costs_Prompt,Number_error)
+    program_phases_costs[program] = Program_Phase_Cost
 
 print program_phases_costs
 
@@ -101,7 +113,7 @@ revenue_milestone_amounts ={}
 
 for milestone in revenue_milestones:
     revenue_milestone_amount_prompt = "How much revenue is milestone %s worth?" % milestone
-    revenue_milestone_amount = int_input(revenue_milestone_amount_prompt,Number_error)
+    revenue_milestone_amount = decimal_input(revenue_milestone_amount_prompt,Number_error)
     revenue_milestone_amounts[milestone] = revenue_milestone_amount
 
 #Programs
@@ -136,7 +148,7 @@ for program in Programs:
             program_milestone_achieved = yes_no_prompt(program_milestone_achieved_prompt)
             if program_milestone_achieved == "Yes":
                 program_milestone_achieved_period_prompt = "In what period is the %(x)s milestone achieved for program %(y)s?" % {"x" : milestone, "y" : program_name}
-                program_milestone_achieved_period = float(int_input(program_milestone_achieved_period_prompt,Period_Error))
+                program_milestone_achieved_period = float(decimal_input(program_milestone_achieved_period_prompt,Period_Error))
                 program_milestone_achieved_amount = revenue_milestone_amounts[milestone]
                 program_milestone_revenue[program_milestone_achieved_period] = program_milestone_achieved_amount
     print program_milestone_revenue
@@ -145,25 +157,25 @@ for program in Programs:
 
 Starting_FTE_Prompt = "How many FTEs does the company start with?"
 Starting_FTE_Error = "Please enter a valid FTE number"
-Starting_FTEs = int_input(Starting_FTE_Prompt,Starting_FTE_Error)
+Starting_FTEs = decimal_input(Starting_FTE_Prompt,Starting_FTE_Error)
 
 FTE_growth_prompt = "What percent growth rate does the company grow?"
-FTE_growth_rate = int_input(FTE_growth_prompt,Percent_error)
+FTE_growth_rate = percent_input(FTE_growth_prompt,Percent_error)
 
 FTE_cost_rate_prompt = "What is the annual cost of a FTE?"
-FTE_cost_rate = time_measure_convert(int_input(FTE_cost_rate_prompt,Number_error))
+FTE_cost_rate = time_measure_convert(decimal_input(FTE_cost_rate_prompt,Number_error))
 
 FTE_cost_rate_growth_prompt = "What is the annual growth rate in FTE costs?"
-FTE_cost_rate_growth = time_measure_convert(int_input(FTE_cost_rate_growth_prompt,Percent_error))
+FTE_cost_rate_growth = time_measure_convert(percent_input(FTE_cost_rate_growth_prompt,Percent_error))
 
 FTEs = {}
 
 def growth(base, growth_rate, results):
-	base_period = 0.0
-	for period in years:
-		results[period] = int(base*((1+(float(growth_rate)/100))**base_period))
-		base_period = base_period + Time_Measure_Options[Time_Measure]
-	return results
+    base_period = Decimal('0.0')
+    for period in years:
+        results[period] = int(base*((Decimal('1') + growth_rate)**base_period))
+        base_period = base_period + Time_Measure_Options[Time_Measure]
+    return results
 
 growth(Starting_FTEs,FTE_growth_rate,FTEs)
 
@@ -176,10 +188,10 @@ print FTE_Cost
 #operating costs
 
 Operating_costs_prompt = "What is the baseline operating cost per %s period?" % Time_Measure
-Starting_operating_costs = int_input(Operating_costs_prompt,Number_error)
+Starting_operating_costs = decimal_input(Operating_costs_prompt,Number_error)
 
 Operating_costs_rate_prompt = "What rate do baseline costs increase per %s period?" %Time_Measure
-Operating_costs_growth_rate = int_input(Operating_costs_rate_prompt,Percent_error)
+Operating_costs_growth_rate = percent_input(Operating_costs_rate_prompt,Percent_error)
 
 Operating_costs ={}
 
@@ -189,14 +201,14 @@ print Operating_costs
 #reporting
 
 period_reported_prompt = "What period do you want financial results for?"
-period_reported = int_input(period_reported_prompt,Period_Error)
+period_reported = decimal_input(period_reported_prompt,Period_Error)
 
 while (period_reported in years) == False:
-	print Period_Error
-        period_reported = int_input(period_reported_prompt,Period_Error)
+    print Period_Error
+    period_reported = decimal_input(period_reported_prompt,Period_Error)
 
-company_revenue = 0
-company_program_expense = 0
+company_revenue = Decimal('0')
+company_program_expense = Decimal('0')
 
 print "Total Period Costs:"
 for program in Programs:
