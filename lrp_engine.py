@@ -10,8 +10,9 @@ def decimal_input(prompt,error_message):
             Raw_Input_Decimal = Decimal(Raw_Input_String)  #convert raw input (string) to integer
             valid_input = True
         except ValueError:    
-            print error_message
+            print(error_message)
     return Raw_Input_Decimal
+
 
 
 def percent_input(prompt,error_message):
@@ -32,7 +33,7 @@ def yes_no_prompt(prompt):
     #function that requires a yes or no response
     yes_no = raw_input(prompt)
     while (yes_no == "Yes" or "No") == False:
-        print "Please enter a Yes or No response"
+        print("Please enter a Yes or No response")
         yes_no = raw_input(prompt)
     return yes_no
 
@@ -63,7 +64,7 @@ Time_Measure_Options = {
 Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")
 
 while (Time_Measure in Time_Measure_Options) == False:
-    print Period_Error
+    print(Period_Error)
     Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")     
 
 years=[]
@@ -73,7 +74,7 @@ while Starting_Year < Last_Year:
     years.append(Starting_Year)
     Starting_Year = Starting_Year + Time_Measure_Options[Time_Measure]
 
-print years
+print(years)
 
 number_of_periods = len(years)
 
@@ -89,7 +90,7 @@ Program_Phases_Prompt = "What label do you want for cost phase "
 
 count_objects(Program_Phases_Count_Prompt,Number_error,Program_Phases_Prompt,program_phases)
 
-print program_phases
+print(program_phases)
 
 program_phases_costs ={}
 
@@ -98,7 +99,7 @@ for program in program_phases:
     Program_Phase_Cost = decimal_input(Program_Phases_Costs_Prompt,Number_error)
     program_phases_costs[program] = Program_Phase_Cost
 
-print program_phases_costs
+print(program_phases_costs)
 
 #Setting up Program Milestones
 #(I think I can create a function to do this and program phases)
@@ -135,7 +136,7 @@ for program in Programs:
         #User assigns what cost phase the program is in by period
         program_phase_by_period = raw_input("In %(x)s, what phase is program %(y)s in?" % {"x" : period, "y" : program_name})
         while (program_phase_by_period in program_phases_costs) == False:
-            print "Please enter a valid program cost phase"
+            print("Please enter a valid program cost phase")
             program_phase_by_period = raw_input("In %(x)s, what phase is program %(y)s in?" % {"x" : period, "y" : program_name})
         program[period]= program_phase_by_period
         phase_cost = program_phases_costs[program_phase_by_period]
@@ -151,7 +152,7 @@ for program in Programs:
                 program_milestone_achieved_period = float(decimal_input(program_milestone_achieved_period_prompt,Period_Error))
                 program_milestone_achieved_amount = revenue_milestone_amounts[milestone]
                 program_milestone_revenue[program_milestone_achieved_period] = program_milestone_achieved_amount
-    print program_milestone_revenue
+    print(program_milestone_revenue)
 
 #FTEs
 
@@ -182,8 +183,8 @@ growth(Starting_FTEs,FTE_growth_rate,FTEs)
 FTE_Cost = {}
 growth(FTE_cost_rate,FTE_cost_rate_growth,FTE_Cost)
 
-print FTEs
-print FTE_Cost
+print(FTEs)
+print(FTE_Cost)
 
 #operating costs
 
@@ -197,29 +198,29 @@ Operating_costs ={}
 
 growth(Starting_operating_costs,Operating_costs_growth_rate,Operating_costs)
 
-print Operating_costs
+print(Operating_costs)
 #reporting
 
 period_reported_prompt = "What period do you want financial results for?"
 period_reported = decimal_input(period_reported_prompt,Period_Error)
 
 while (period_reported in years) == False:
-    print Period_Error
+    print(Period_Error)
     period_reported = decimal_input(period_reported_prompt,Period_Error)
 
 company_revenue = Decimal('0')
 company_program_expense = Decimal('0')
 
-print "Total Period Costs:"
+print("Total Period Costs:")
 for program in Programs:
     
-    print "Program %(x)s revenue was %(y)s" % {"x" : program, "y" :program_milestone_revenue[period_reported]}
-    print "Program %(x)s costs was %(y)s" % {"x": program, "y" : program_costs[period_reported]}
+    print("Program %(x)s revenue was %(y)s" % {"x" : program, "y" :program_milestone_revenue[period_reported]})
+    print("Program %(x)s costs was %(y)s" % {"x": program, "y" : program_costs[period_reported]})
     company_revenue += program_milestone_revenue[period_reported]
     company_program_expense += program_costs[period_reported]
 
-print "Total FTE costs were %s"  % FTE_Cost[period_reported]
-print "Total operating costs were %s" %  Operating_costs[period_reported]
+print("Total FTE costs were %s"  % FTE_Cost[period_reported])
+print("Total operating costs were %s" %  Operating_costs[period_reported])
 
 net_income = company_revenue - company_program_expense - FTE_Cost[period_reported]- Operating_costs[period_reported]
-print "The Company's net income was %s" % net_income
+print("The Company's net income was %s" % net_income)
