@@ -5,11 +5,11 @@ def decimal_input(prompt,error_message):
     #converts raw input from string into integer
     valid_input = False
     while valid_input == False:
-        try: 
+        try:
             Raw_Input_String = raw_input(prompt)
             Raw_Input_Decimal = Decimal(Raw_Input_String)  #convert raw input (string) to integer
             valid_input = True
-        except ValueError:    
+        except ValueError:
             print(error_message)
     return Raw_Input_Decimal
 
@@ -25,7 +25,7 @@ def count_objects(prompt, error_message,name_objects,name_objects_list):
     Count = decimal_input(prompt,error_message)
     input_count = 1
     while input_count < (Count+1):
-        Program_Name = raw_input(name_objects+str(input_count)+"?")  
+        Program_Name = raw_input(name_objects+str(input_count)+"?")
         name_objects_list.append(Program_Name)
         input_count += 1
 
@@ -65,7 +65,7 @@ Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annu
 
 while (Time_Measure in Time_Measure_Options) == False:
     print(Period_Error)
-    Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")     
+    Time_Measure = raw_input("How do you want to measure periods (quarter, semi-annual, annual?")
 
 years=[]
 
@@ -213,7 +213,7 @@ company_program_expense = Decimal('0')
 
 print("Total Period Costs:")
 for program in Programs:
-    
+
     print("Program %(x)s revenue was %(y)s" % {"x" : program, "y" :program_milestone_revenue[period_reported]})
     print("Program %(x)s costs was %(y)s" % {"x": program, "y" : program_costs[period_reported]})
     company_revenue += program_milestone_revenue[period_reported]
