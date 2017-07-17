@@ -1,3 +1,4 @@
+from __future__ import print_function 
 from decimal import Decimal
 
 
@@ -149,9 +150,14 @@ for program in Programs:
             program_milestone_achieved = yes_no_prompt(program_milestone_achieved_prompt)
             if program_milestone_achieved == "Yes":
                 program_milestone_achieved_period_prompt = "In what period is the %(x)s milestone achieved for program %(y)s?" % {"x" : milestone, "y" : program_name}
-                program_milestone_achieved_period = float(decimal_input(program_milestone_achieved_period_prompt,Period_Error))
+                program_milestone_achieved_period = decimal_input(program_milestone_achieved_period_prompt,Period_Error)
                 program_milestone_achieved_amount = revenue_milestone_amounts[milestone]
                 program_milestone_revenue[program_milestone_achieved_period] = program_milestone_achieved_amount
+            else:
+                program_milestone_revenue[program_milestone_achieved_period]=0
+    else:
+        for period in years:
+            program_milestone_revenue[period]=0
     print(program_milestone_revenue)
 
 #FTEs
