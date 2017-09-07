@@ -151,7 +151,7 @@ simple_dataset ={
                 'Periods': 12.0
             },
         ],
-        'Incremental_Costs': [
+        'Incremental_Prog_Costs': [
                 {'Name': 'Program 1 CMC overruns', 'Amount': 500, 'Program_ID': 'P001', 'Phase_ID': 'Preclinical'},
                 {'Name': 'Biology complications', 'Amount': 200, 'Program_ID': 'P003', 'Phase_ID': 'Discovery'}
                 ],
@@ -159,6 +159,18 @@ simple_dataset ={
         'FTE_rate': 100,
         'FTE_increase_rate': 5.0,
         'FTE_rate_increase_rate': 5.0,
+        'Other_Costs': [
+                {'Name': 'CapEx', 'Growth_Rate': 2.0, 'Amount':[
+                    {'Period': 1, 'Amount': 5},
+                    {'Period': 2, 'Amount': 10}
+                    ],
+                    },
+                {'Name': 'Operating Expenses', 'Growth_Rate': None, 'Amount':[
+                    {'Period': 1, 'Amount': 20},
+                    {'Period': 2, 'Amount': 20}
+                    ],
+                    },
+                ],
         'CapEx': 10,
         'CapEx_increase_rate': 2.0,
         'Operating_Expense': 10,
@@ -204,8 +216,8 @@ def Period_Costs(Cost_Phase,Start,End,Program):
         for trial in simple_dataset['Clinical_Phases']:
             if Cost_Phase == trial['ID']:
                 Cost = (trial['Patients']*trial['Patient_Cost'])
-    for program in simple_dataset['Incremental_Costs']:
-        for phase in simple_dataset['Incremental_Costs']:
+    for program in simple_dataset['Incremental_Prog_Costs']:
+        for phase in simple_dataset['Incremental_Prog_Costs']:
             if (Cost_Phase == phase['Phase_ID']) and (Program == program['Program_ID']):
                 Cost += program['Amount']
     Period_Costs = Cost / (End - Start + 1)
@@ -237,6 +249,17 @@ def collab_payments(timing_dict, payment_dict):
                     for item in ownership[payment_dict]:
                         if (payment['ID'] == item['ID']):
                             collab_inflows[payment['Period']] += item['Amount']
+
+def annual_increases_other_cost(base_amount,increase_amount):
+    for period in period_list:
+        #calculate FTE spend by period
+        if period == 1:
+            return base_amount
+        elif ((period % 4.0) == 1) == True:
+            return int((base_amount)*(increase_rate(increase_amount)**((period/4)-1)))
+        else:
+            return [period-1]
+
 
 
 #collaboration inflows
@@ -273,10 +296,8 @@ for collab_program in collaboration['Collab_Programs']:
                 for milestone in ownership['Milestones']:
                     if (milestone_payment['ID'] == milestone['ID']):
                         collab_inflows[milestone_payment['Period']] += milestone['Amount']
-        
-print (collab_inflows)
 
-#program costs
+#Program costs
 
 program_cost = {}
 
@@ -302,6 +323,27 @@ for period in period_list:
     annual_increases(FTE_rate,simple_dataset.get('FTE_rate'),simple_dataset.get('FTE_rate_increase_rate'))
     #calculate total FTE spend for the period
     FTE_spend[period] = FTE[period]*FTE_rate[period]
+
+#Other costs
+
+other_cost = {}
+
+for period in period_list:
+    other_cost[period] = 0
+
+for period in period_list:
+    for cost in simple_dataset['Other_Costs']:
+        for amount in cost['Amount']:
+            while amount['Period'] > periods:
+                amount['Period'] = None
+            if amount['Period'] != None:
+                other_cost[period] = amount['Amount']
+            elif cost['Growth_Rate'] == None:
+                other_cost[period] = other_cost[period-1]
+            else:
+                other_cost[period] = annual_increases_other_cost(amount[period-1],cost['Growth_Rate'])
+
+print (other_cost)
 
 #CapEx
 
@@ -335,7 +377,7 @@ for period in period_list:
     else:
         beg_cash[period] = end_cash[period-1]
     try:
-        inflows [period] = Financings[period]
+        inflows [period] = Financings[period] + collab_inflows[period]
     except KeyError:
         inflows [period] = 0
     outflows[period] = program_cost[period] + FTE_spend[period] + CapEx_spend[period] + Operating_Exp_spend[period]
