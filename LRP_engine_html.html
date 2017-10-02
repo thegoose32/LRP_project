@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  table{
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 50%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+  </style>
+
+  <title> Pharma LRP Engine </title>
+</head>
+
+<body>
+
+  <h1> General Assumptions </h1>
+  <p> Enter general assumptions here: </p>
+  <br>
+  <table>
+    <tr>
+      <td>Starting cash</td>
+      <td>
+        <input id="start_cash" type="number">
+      </td>
+    </tr>
+    <tr>
+      <td>Starting year</td>
+      <td>
+        <input id="start_year" type="number" min="1900" max="2099" step="1" value="2018" />
+      </td>
+    </tr>
+  </table>
+
+  <h1> Financings </h1>
+  <p> Enter financing assumptions here: </p>
+  <br>
+  <table>
+  <tr>
+    <th>Financing Name</th>
+    <th>Period</th> 
+    <th>Amount</th>
+  </tr>
+  <tr>
+    <td>Seed round</td>
+    <td>Q4 2017</td> 
+    <td>
+        <input id="financing_1" type="number">
+    </td>
+  </tr>
+  <tr>
+    <td>Series A</td>
+    <td>Q2 2019</td> 
+    <td>
+        <input id="financing_2" type="number">
+    </td>
+  </tr>
+  <tr>
+    <td><input type="button" value="Add" onclick="msg()"></td>
+  </tr>
+  </table>
+  
+  <h1> Programs </h1>
+  <p> Enter program information here: </p>
+  <br>
+  <table>
+    <tr>
+      <th>Program Name</th>
+    </tr>
+    <tr>
+      <td><input id="program_1"> </td>
+    </tr>
+    <tr>
+      <td><input id="program_2"> </td>
+    </tr>
+    <tr>
+      <td><input id="program_3"> </td>
+    </tr>
+    <tr>
+      <td><input type="button" value="Add" onclick="msg()"></td>
+    </tr>
+  </table>
+  <br> 
+  
+  <h1> Preclinical cost phases </h1>
+  <br>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Total phase cost</th>
+    </tr>
+    <tr>
+      <td>Discovery</td>
+      <td>
+         <input id="discovery_spend" type="number">
+      </td>
+    </tr>
+    <tr>
+      <td>Preclinical</td>
+      <td>
+         <input id="preclincial_spend" type="number">
+      </td>
+    </tr>
+  </table>
+  
+  <h1> Clinical cost phases </h1>
+  <br>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Patients</th>
+      <th>Per patient cost</th>
+      <th>Total phase cost</th>
+    </tr>
+    <tr>
+      <td>Phase 1</td>
+      <td>
+        <input id="Phase_1_patients" type="number">
+      </td>
+      <td>
+        <input id="Phase_1_patient_cost" type="number">
+      </td>
+      <td>200</td>
+    </tr>
+    <tr>
+      <td>Phase 2</td>
+      <td> 
+        <input id="Phase_2_patients" type="number">
+      </td>
+      <td>
+        <input id="Phase_2_patient_cost" type="number">
+      </td>
+      <td>400</td>
+    </tr>
+    <tr>
+      <td>Phase 3</td>
+      <td>
+        <input id="Phase_3_patients" type="number"> 
+      </td>
+      <td>
+        <input id="Phase_3_patient_cost" type="number">
+      </td>
+      <td>600</td>
+    </tr>
+  </table>
+  
+  <h1> Other Spending </h1>
+  <br>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Rate</th>
+      <th>Growth Rate</th>
+    </tr>
+    <tr>
+      <td>Operating Spend</td>
+      <td>
+        <input id="other_cost_1" type="number">
+      </td>
+      <td>
+        <input id="other_cost_1_growth_rate" type="number" min=0 max=100>
+    </tr>
+    <tr>
+      <td>Capital Expenditures</td>
+      <td>
+        <input id="other_cost_2" type="number">
+      </td>
+      <td>
+        <input id="other_cost_1_growth_rate" type="number" min=0 max=100>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="button" value="Add" onclick="msg()"></td>
+      </td>
+    </tr>
+    </tr>
+  </table>
+  <br>
+  <h1> Timeline </h1>
+  <table style="width:150%">
+    <tr>
+      <th>Name</th>
+      <th>Q1 2018</th>
+      <th>Q2 2018</th>
+      <th>Q3 2018</th>
+      <th>Q4 2018</th>
+      <th>Q1 2019</th>
+      <th>Q2 2019</th>
+      <th>Q3 2019</th>
+      <th>Q4 2019</th>
+      <th>Q1 2020</th>
+      <th>Q2 2020</th>
+      <th>Q3 2020</th>
+      <th>Q4 2020</th>
+      <th>Q1 2021</th>
+      <th>Q2 2021</th>
+      <th>Q3 2021</th>
+      <th>Q4 2021</th>
+      <th>Q1 2022</th>
+      <th>Q2 2022</th>
+      <th>Q3 2022</th>
+      <th>Q4 2022</th>
+    </tr>
+    <tr>
+      <td>Target 1</td>
+    </tr>
+    <tr>
+      <td>Target 2</td>
+    </tr>
+    <tr>
+      <td>Target 3</td>
+    </tr>
+    <tr><td> </td></tr>
+    <tr>
+      <td>R&D Employees</td>
+    </tr>
+    <tr>
+      <td>G&A Employees</td>
+    </tr> 
+    <tr><td> </td></tr>
+    <tr>
+      <td>Cash balance</td>
+    </tr>
+    <tr>
+      <td>Total Spend</td>
+    </tr>
+  </table>
+
+</body>
+
+</html>
